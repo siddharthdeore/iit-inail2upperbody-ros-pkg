@@ -1,0 +1,19 @@
+<!--<?xml version="1.0"?>-->
+<robot  xmlns:xacro="http://ros.org/wiki/xacro">
+
+<!-- Origin -->
+<xacro:property name="Torso_Ox" value=" 0.0 "/> 
+<xacro:property name="Torso_Oy" value=" 0.0 "/>
+<xacro:property name="Torso_Oz" value=" 0.0 "/>
+<xacro:property name="Torso_roll" value=" 0.0 "/>
+<xacro:property name="Torso_pitch" value=" 0.0 "/>
+<xacro:property name="Torso_yaw" value=" 0.0 "/>
+
+<!-- Origin -->
+<xacro:property name="Arm_Ox" value=" 0.0649997 "/>
+<xacro:property name="Arm_Oy" value=" 0.161981 "/>
+<xacro:property name="Arm_Oz" value=" 0.230261 "/>
+<xacro:property name="Arm_roll" value=" ${-PI/4} "/>
+<xacro:property name="Arm_pitch" value=" 0.0"/> 
+<xacro:property name="Arm_yaw" value=" 0.0 "/>
+</robot>

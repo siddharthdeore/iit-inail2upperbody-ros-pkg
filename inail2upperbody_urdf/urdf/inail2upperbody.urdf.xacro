@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="inail2upperbody">
+
+    <xacro:include filename="$(find inail2upperbody_urdf)/urdf/conversions.urdf.xacro" />
+    <xacro:include filename="$(find inail2upperbody_urdf)/urdf/materials.urdf.xacro" />
+
+    <!-- for torso -->
+    <xacro:include filename="$(find inail2upperbody_urdf)/urdf/inail2torso.urdf.xacro" />
+    <xacro:include filename="$(find inail2upperbody_urdf)/urdf/kinematics_properties.urdf.xacro" />
+    <xacro:include filename="$(find inail2upperbody_urdf)/urdf/inertial_properties.urdf.xacro" />
+    
+    <!-- for arms -->
+    <xacro:include filename="$(find inail2arm_urdf)/urdf/inail2arm_macro.urdf.xacro" />
+    <xacro:include filename="$(find inail2arm_urdf)/urdf/kinematics_properties.urdf.xacro" />
+    <xacro:include filename="$(find inail2arm_urdf)/urdf/inertial_properties.urdf.xacro" />
+    <xacro:include filename="$(find inail2arm_urdf)/urdf/limits.urdf.xacro" />
+    
+    <link name="world"/>
+
+    <xacro:inail2_torso rot="1" parent="world">
+      <origin xyz="${Torso_Ox} ${Torso_Oy} ${Torso_Oz}" rpy="${Torso_roll} ${Torso_pitch} ${Torso_yaw}"/>
+    </xacro:inail2_torso>
+
+    <xacro:inail2_arm arm_num="1"  rot="1"  parent="torso">
+      <origin xyz="${Arm_Ox} ${Arm_Oy} ${Arm_Oz}" rpy="${Arm_roll} ${Arm_pitch} ${Arm_yaw}"/>
+    </xacro:inail2_arm>
+
+    <xacro:inail2_arm arm_num="2"  rot="-1"  parent="torso">
+      <origin xyz="${Arm_Ox} ${-Arm_Oy} ${Arm_Oz}" rpy="${-Arm_roll} ${Arm_pitch} ${Arm_yaw}"/>
+    </xacro:inail2_arm>
+    
+   
+  
+</robot>

@@ -1,0 +1,33 @@
+solver_options:
+    regularization: 1e-4
+    back_end: qpoases
+
+stack:
+    - [left_arm_ee, right_arm_ee]
+
+    
+constraints: [JointLimits, VelocityLimits]
+
+left_arm_ee:
+    type: Cartesian
+    distal_link: tcp_1
+    base_link: torso
+    lambda: 0.1
+
+right_arm_ee:
+    type: Cartesian
+    distal_link: tcp_2
+    base_link: torso
+    lambda: 0.1
+
+Postural:
+    type: Postural
+    lambda: 0.01
+    weight: 0.001
+    
+JointLimits:
+    type: JointLimits
+
+
+VelocityLimits:
+    type: VelocityLimits

@@ -1,0 +1,39 @@
+<launch>
+
+    <param name="robot_description" command="$(find xacro)/xacro '$(find inail2upperbody_urdf)/urdf/inail2upperbody.urdf.xacro'" />
+    <param name="robot_description_semantic" command="$(find xacro)/xacro '$(find inail2upperbody_srdf)/srdf/inail2upperbody.srdf.xacro'" />
+    <param name="cartesian/problem_description" textfile="$(find inail2upperbody_cartesio)/config/inail2upperbody_simple_stack.yaml"/>
+    
+    <arg name="gui" default="false" />
+    <arg name="solver" default="OpenSot"/>
+    <arg name="prefix" default=""/>
+    <arg name="rate" default="100.0"/>
+    <arg name="tf_prefix" default="ci"/>
+    <arg name="markers" default="true"/>
+    <arg name="namespace" default=""/> <!-- dummy argument avoids pass_all_args error in parent launch file -->
+    <arg name="is_model_floating_base" default="false"/>    
+    
+    <node pkg="cartesian_interface" type="ros_server_node" 
+                                    name="ros_server_node" 
+                                    required="true" 
+                                    output="screen" 
+                                    launch-prefix="$(arg prefix)">
+                                    
+        <param name="is_model_floating_base" value="$(arg is_model_floating_base)"/>
+        <param name="model_type" value="RBDL"/>
+        <param name="solver" value="$(arg solver)"/>
+        <param name="rate" value="$(arg rate)"/>
+        <param name="tf_prefix" value="$(arg tf_prefix)"/>
+        
+    </node>
+
+    <node if="$(arg markers)" pkg="cartesian_interface" type="marker_spawner" name="interactive_markers" output="screen">
+        <param name="tf_prefix" value="$(arg tf_prefix)"/>
+    </node>
+
+    <node pkg="tf" type="static_transform_publisher" name="base_link_static_transform" args="0 0 0 0 0 0 base_link ci/world_odom 100" />
+
+    <node pkg="rviz" type="rviz" name="rviz" output="screen" if="$(arg gui)" args="-d $(find inail2upperbody_cartesio)/config/inail2upperbody_cartesio.rviz">
+    </node> 
+
+</launch>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+      <xacro:include filename="$(find inail2arm_urdf)/urdf/parts/inail2arm.urdf.xacro" />
+
+
+      <!-- arms -->
+      <xacro:inail2arm arm_num="1" rot="1" parent="torso_1">
+            <origin xyz="${Shoulder_1_Ox} ${Shoulder_1_Oy} ${Shoulder_1_Oz}"
+                  rpy="${Shoulder_1_roll} ${Shoulder_1_pitch} ${Shoulder_1_yaw}" />
+      </xacro:inail2arm>
+
+      <xacro:inail2arm arm_num="2" rot="-1" parent="torso_1">
+            <origin xyz="${Shoulder_1_Ox} ${-Shoulder_1_Oy} ${Shoulder_1_Oz}"
+                  rpy="${-Shoulder_1_roll} ${Shoulder_1_pitch} ${-Shoulder_1_yaw}" />
+      </xacro:inail2arm>
+
+
+</robot>
