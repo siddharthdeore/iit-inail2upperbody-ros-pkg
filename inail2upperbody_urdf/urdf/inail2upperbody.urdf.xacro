@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="inail2upperbody">
+    
+    <!-- End effector types: none, ball, dagana, dagana_fixed -->
+    <xacro:arg name="ee_left" default="dagana" />
+    <xacro:arg name="ee_right" default="none" />
 
     <xacro:include filename="$(find inail2upperbody_urdf)/urdf/conversions.urdf.xacro" />
     <xacro:include filename="$(find inail2upperbody_urdf)/urdf/materials.urdf.xacro" />
@@ -8,27 +12,58 @@
     <xacro:include filename="$(find inail2upperbody_urdf)/urdf/inail2torso.urdf.xacro" />
     <xacro:include filename="$(find inail2upperbody_urdf)/urdf/kinematics_properties.urdf.xacro" />
     <xacro:include filename="$(find inail2upperbody_urdf)/urdf/inertial_properties.urdf.xacro" />
-    
+
     <!-- for arms -->
     <xacro:include filename="$(find inail2arm_urdf)/urdf/inail2arm_macro.urdf.xacro" />
     <xacro:include filename="$(find inail2arm_urdf)/urdf/kinematics_properties.urdf.xacro" />
     <xacro:include filename="$(find inail2arm_urdf)/urdf/inertial_properties.urdf.xacro" />
     <xacro:include filename="$(find inail2arm_urdf)/urdf/limits.urdf.xacro" />
-    
-    <link name="world"/>
+
+    <!-- for end effectors -->
+    <xacro:include filename="$(find inail2arm_urdf)/urdf/inail2arm_ee_macro.urdf.xacro" />
+
+    <link name="world" />
 
     <xacro:inail2_torso rot="1" parent="world">
-      <origin xyz="${Torso_Ox} ${Torso_Oy} ${Torso_Oz}" rpy="${Torso_roll} ${Torso_pitch} ${Torso_yaw}"/>
+        <origin xyz="${Torso_Ox} ${Torso_Oy} ${Torso_Oz}"
+            rpy="${Torso_roll} ${Torso_pitch} ${Torso_yaw}" />
     </xacro:inail2_torso>
 
-    <xacro:inail2_arm arm_num="1"  rot="1"  parent="torso">
-      <origin xyz="${Arm_Ox} ${Arm_Oy} ${Arm_Oz}" rpy="${Arm_roll} ${Arm_pitch} ${Arm_yaw}"/>
+    <link name="mount_frame_1" />
+    <joint name="mount_joint_1" type="fixed">
+        <parent link="torso" />
+        <child link="mount_frame_1" />
+        <origin xyz="${Arm_Ox} ${-Arm_Oy} ${Arm_Oz}" rpy="${-Arm_roll} ${Arm_pitch} ${Arm_yaw}" />
+    </joint>
+
+
+    <link name="mount_frame_2" />
+    <joint name="mount_joint_2" type="fixed">
+        <parent link="torso" />
+        <child link="mount_frame_2" />
+        <origin xyz="${Arm_Ox} ${Arm_Oy} ${Arm_Oz}" rpy="${Arm_roll} ${Arm_pitch} ${Arm_yaw}" />
+    </joint>
+
+    <xacro:inail2_arm arm_num="1" rot="1" parent="mount_frame_1">
+        <origin xyz="0 0 0" rpy="0 0 ${-90*toRad}" />
     </xacro:inail2_arm>
 
-    <xacro:inail2_arm arm_num="2"  rot="-1"  parent="torso">
-      <origin xyz="${Arm_Ox} ${-Arm_Oy} ${Arm_Oz}" rpy="${-Arm_roll} ${Arm_pitch} ${Arm_yaw}"/>
+    <xacro:inail2_arm arm_num="2" rot="1" parent="mount_frame_2">
+        <origin xyz="0 0 0" rpy="0 0 ${-90*toRad}" />
     </xacro:inail2_arm>
-    
-   
-  
+
+    <!---  END EFFECTOR  -->
+    <xacro:property name="END_EFFECTOR" value="$(arg ee_left)" />
+    <xacro:inail2_arm_ee arm_num="1" parent="arm1_6" /> 
+
+    <xacro:property name="END_EFFECTOR" value="$(arg ee_right)" />
+    <xacro:inail2_arm_ee arm_num="2" parent="arm2_6" />
+
+    <!--
+    <xacro:include filename="$(find inail2arm_urdf)/urdf/ball.urdf.xacro" />
+    <xacro:ball_end_effector arm_num="2" parent_link="arm2_6">
+        <origin xyz="${EE_mount_Ox} ${EE_mount_Oy} ${EE_mount_Oz}" rpy="${PI} 0 0" />
+    </xacro:ball_end_effector>
+    -->
+
 </robot>
